@@ -1,6 +1,7 @@
 package br.com.developer.gerenciador.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -32,6 +33,17 @@ public class ContaController {
 	@GetMapping
 	public List<Conta> listar(){
 		return contaService.listar();
+	}
+	
+	@GetMapping("/{contaId}")
+	public ResponseEntity <Conta> buscar(@PathVariable Long contaId) {
+		Optional <Conta> conta = contaRepository.findById(contaId);
+		//tratando status do metodo
+		if (conta.isPresent()) {			
+			return ResponseEntity.ok(conta.get());
+		}
+		
+		return ResponseEntity.notFound().build();		
 	}
 	
 	@PostMapping
